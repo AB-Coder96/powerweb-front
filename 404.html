@@ -1,36 +1,41 @@
+
 <!DOCTYPE html>
-<html>
-  <head>
-    <meta charset="utf-8" />
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="robots" content="noindex" />
+    <title>Redirecting...</title>
+
     <script>
-      // GitHub Pages SPA redirect (BrowserRouter compatible)
-      // Always redirect to the site root (or repo root), NOT to the parent directory.
-      (function () {
-        var l = window.location;
+        (function () {
+            var locationInfo = window.location;
 
-        // If you're deployed as a *project* site: /<repo>/...
-        // If you're deployed as a *user/org* site: /...
-        // We auto-detect by checking whether the first segment looks like a route.
-        var knownRoutes = new Set([
-          "about",
-          "projects",
-          "profile",
-          "profile1",
-          "profile2",
-          "profile3",
-          "profile4"
-        ]);
+            // Web_Base=/ means the frontend lives at the domain root.
+            var siteBase = "/";
 
-        var parts = l.pathname.split("/").filter(Boolean); // e.g. ["zetaslate","projects","123"] or ["projects","123"]
-        var first = parts[0] || "";
-        var base = first && !knownRoutes.has(first) ? "/" + first : ""; // "/zetaslate" or ""
+            // Avoid another redirect if the root itself is missing.
+            if (locationInfo.pathname === siteBase) {
+                return;
+            }
 
-        var fullPath = l.pathname + l.search + l.hash;
+            // Preserve the originally requested React route.
+            var originalPath =
+                locationInfo.pathname +
+                locationInfo.search +
+                locationInfo.hash;
 
-        // Redirect to root index.html with the original path encoded
-        l.replace(l.origin + base + "/?redirect=" + encodeURIComponent(fullPath));
-      })();
+            // Return to the SPA entry page once.
+            var destination =
+                locationInfo.origin +
+                siteBase +
+                "?redirect=" +
+                encodeURIComponent(originalPath);
+
+            locationInfo.replace(destination);
+        })();
     </script>
-  </head>
-  <body></body>
+</head>
+<body>
+    <p>Redirecting to the website...</p>
+</body>
 </html>
